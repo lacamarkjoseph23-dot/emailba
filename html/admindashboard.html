@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard - FISHDA</title>
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="../css/dashboard.css">
+  <link rel="stylesheet" href="../css/global.css">
+  
+  <style>
+    .admin-header {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+      color: white;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .admin-header i {
+      font-size: 2em;
+    }
+
+    .admin-header h2 {
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    .admin-header p {
+      margin: 5px 0 0 0;
+      opacity: 0.9;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .stat-card h3 {
+      margin: 0 0 10px 0;
+      color: #64748b;
+      font-size: 0.9em;
+      font-weight: 500;
+      text-transform: uppercase;
+    }
+
+    .stat-card .value {
+      font-size: 2.5em;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 10px;
+    }
+
+    .stat-card .label {
+      color: #94a3b8;
+      font-size: 0.9em;
+    }
+
+    .users-table {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .users-table h3 {
+      margin: 0 0 20px 0;
+      font-size: 1.2em;
+      color: #0f172a;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th {
+      background: #f8fafc;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 2px solid #e2e8f0;
+    }
+
+    table td {
+      padding: 12px;
+      border-bottom: 1px solid #e2e8f0;
+      color: #334155;
+    }
+
+    table tr:hover {
+      background: #f8fafc;
+    }
+
+    .role-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .role-admin {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .role-user {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 0.85em;
+      font-weight: 600;
+    }
+
+    .status-active {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .status-disabled {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .action-btn {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.85em;
+      margin-right: 5px;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: #dbeafe;
+      color: #2563eb;
+    }
+
+    .btn-edit:hover {
+      background: #2563eb;
+      color: white;
+    }
+
+    .btn-disable {
+      background: #fee2e2;
+      color: #dc2626;
+    }
+
+    .btn-disable:hover {
+      background: #dc2626;
+      color: white;
+    }
+
+    .btn-enable {
+      background: #dcfce7;
+      color: #16a34a;
+    }
+
+    .btn-enable:hover {
+      background: #16a34a;
+      color: white;
+    }
+
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #64748b;
+    }
+
+    .nav-links {
+      margin-bottom: 20px;
+    }
+
+    .nav-links a {
+      color: #0ea5e9;
+      text-decoration: none;
+      margin-right: 20px;
+      font-weight: 500;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Navigation -->
+    <div class="nav-links">
+      <a href="../html/dashboard.html"><i class="fas fa-tachometer-alt"></i> Regular Dashboard</a>
+      <a href="#" onclick="logout()"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    </div>
+
+    <!-- Admin Header -->
+    <div class="admin-header">
+      <i class="fas fa-user-shield"></i>
+      <div>
+        <h2>Administrator Dashboard</h2>
+        <p>Manage users and system settings</p>
+      </div>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <h3>Total Users</h3>
+        <div class="value" id="totalUsers">-</div>
+        <div class="label">Registered accounts</div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Active Users</h3>
+        <div class="value" id="activeUsers">-</div>
+        <div class="label">Currently active</div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Administrators</h3>
+        <div class="value" id="adminCount">-</div>
+        <div class="label">Admin accounts</div>
+      </div>
+
+      <div class="stat-card">
+        <h3>Disabled Accounts</h3>
+        <div class="value" id="disabledCount">-</div>
+        <div class="label">Suspended users</div>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="users-table">
+      <h3><i class="fas fa-users"></i> User Management</h3>
+      <div class="table-wrapper">
+        <table id="usersTable">
+          <thead>
+            <tr>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th>Last Login</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="usersTableBody">
+            <tr>
+              <td colspan="6" class="loading">
+                <i class="fas fa-spinner fa-spin"></i> Loading users...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+  
+  <!-- Your Firebase Configuration -->
+  <script src="../js/firebase.js"></script>
+  
+  <!-- Auth Guard -->
+  <script src="../js/authguard.js"></script>
+  
+  <!-- Role Manager -->
+  <script src="../js/rolemanager.js"></script>
+  
+  <!-- Admin Script -->
+  <script src="../js/admin.js"></script>
+</body>
+</html>
